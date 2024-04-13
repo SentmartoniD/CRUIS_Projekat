@@ -1,8 +1,10 @@
 ﻿using Communication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
+using Models.Common;
 using Models.DTO;
 using System.Fabric;
 
@@ -58,6 +60,50 @@ namespace WebAPI.Controllers
                 var newStudent = await statefullProxy.AddStudent(studentSignUpDTO);
 
                 return Ok(new { Data = newStudent });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("by-indexNumber/{indexNumber}")]
+        [Authorize(Roles = "student")]
+        public async Task<ActionResult> GetStudent(string indexNumber)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.GetStudent(indexNumber);
+
+                return Ok(student);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("update")]
+        [Authorize(Roles = "student")]
+        public async Task<ActionResult> Update(StudentUpdateDTO studentUpdateDTO)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.UpdateStudent(studentUpdateDTO);
+
+                return Ok(student);
             }
             catch (Exception e)
             {

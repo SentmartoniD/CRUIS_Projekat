@@ -77,7 +77,7 @@ namespace AuthenticationService
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Role, "student"));
-            claims.Add(new Claim("indexNUmber", indexNUmber));
+            claims.Add(new Claim("indexNumber", indexNUmber));
             //Kreiramo kredencijale za potpisivanje tokena. Token mora biti potpisan privatnim kljucem
             //kako bi se sprecile njegove neovlascene izmene
             Microsoft.IdentityModel.Tokens.SymmetricSecurityKey secretKey =

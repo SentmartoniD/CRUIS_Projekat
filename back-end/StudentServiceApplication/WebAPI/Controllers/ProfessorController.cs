@@ -4,6 +4,10 @@ using Microsoft.ServiceFabric.Services.Remoting.Client;
 using Communication;
 using Models.DTO;
 using Models.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.ServiceFabric.Services.Client;
+using System.Data;
+using System.Fabric;
 
 namespace WebAPI.Controllers
 {
@@ -30,6 +34,50 @@ namespace WebAPI.Controllers
                 var token = await statelessAuthenticationServiceProxy.IssueTokenForProfessor(professorSignInDTO.Email);
 
                 return Ok(token);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("by-email/{email}")]
+        [Authorize(Roles = "professor")]
+        public async Task<ActionResult> GetProfessor(string email)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/ProfessorService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
+                var professor = await statefullProxy.GetProfesor(email);
+
+                return Ok(professor);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("update")]
+        [Authorize(Roles = "professor")]
+        public async Task<ActionResult> Update(ProfessorUpdateDTO professorUpdateDTO)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/ProfessorService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.UpdateProfessor(professorUpdateDTO);
+
+                return Ok(student);
             }
             catch (Exception e)
             {

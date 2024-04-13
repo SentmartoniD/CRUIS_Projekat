@@ -4,7 +4,8 @@ import { UserContext } from '../../contexts/UserContext'
 import { useEffect, useState } from "react";
 
 const NavigationBar = () => {
-    const {currentUser} = useContext(UserContext);
+    const {currentUser, setCurrentUser} = useContext(UserContext);
+
     const [role, setRole] = useState("");
 
     useEffect(() => {
@@ -15,16 +16,23 @@ const NavigationBar = () => {
         setRole(userRole)
     }, [])
 
+    const handleSignOut = async () => {
+        setCurrentUser(null)
+    }
+
     return (
         <div>
             {role === "professor" ? 
             <nav>
                 <ul>
                     <li id="1" >
-                        <Link to={"/"} >Profile</Link>
+                        <Link to={"/"} >My Profile</Link>
                     </li>
                     <li id="2" >
                         <Link to={"/subjects"} >Subjects</Link>
+                    </li>
+                    <li id="3" >
+                        <Link to={"/signin"} onClick={handleSignOut} >Sign out!</Link>
                     </li>
                 </ul>
             </nav> 
@@ -32,13 +40,16 @@ const NavigationBar = () => {
             <nav>
                 <ul>
                     <li id="1" >
-                        <Link to={"/"} >Profile</Link>
+                        <Link to={"/"} >My Profile</Link>
                     </li>
                     <li id="2" >
-                        <Link to={"/my-subjects"} >Subjects</Link>
+                        <Link to={"/my-subjects"} >My Subjects</Link>
                     </li>
                     <li id="3" >
-                        <Link to={"/all-subjects"} >Subjects</Link>
+                        <Link to={"/all-subjects"} >All Subjects</Link>
+                    </li>
+                    <li id="4" >
+                        <Link to={"/signin"} onClick={handleSignOut} >Sign out!</Link>
                     </li>
                 </ul>
             </nav>}

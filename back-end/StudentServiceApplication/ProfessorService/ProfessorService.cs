@@ -143,5 +143,52 @@ namespace ProfessorService
 
             return false;
         }
+
+        public async Task<Professor> GetProfesor(string email)
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            Professor myProfessor = new Professor();
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professorEnumerator.Current;
+                if (professor.Value.Email == email)
+                {
+                    myProfessor = professor.Value;
+                    break;
+                }
+
+            }
+
+            return myProfessor;
+        }
+
+        public async Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO)
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            Professor newProfessor = new Professor
+            {
+                Id = professorUpdateDTO.Id,
+                FirstName = professorUpdateDTO.FirstName,
+                LastName = professorUpdateDTO.LastName,
+                Email = professorUpdateDTO.Email,
+                Password = professorUpdateDTO.Password,
+            };
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+
+                await currentProfessorDictionary.TryRemoveAsync(tx, newProfessor.Id);
+
+                await currentProfessorDictionary.AddAsync(tx, newProfessor.Id, newProfessor);
+
+                await tx.CommitAsync();
+            }
+
+            return newProfessor;
+        }
     }
 }

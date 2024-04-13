@@ -18,5 +18,11 @@ namespace Communication
 
         [OperationContract]
         Task<Student> AddStudent(StudentSignUpDTO studentSignUpDTO);
+
+        [OperationContract]
+        Task<Student> GetStudent(string indexNumber);
+
+        [OperationContract]
+        Task<Student> UpdateStudent(StudentUpdateDTO studentUpdateDTO);
     }
 }

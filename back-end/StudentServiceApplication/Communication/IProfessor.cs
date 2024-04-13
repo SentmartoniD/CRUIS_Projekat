@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using Models.DTO;
+using Models.Common;
 
 namespace Communication
 {
@@ -14,5 +15,11 @@ namespace Communication
     {
         [OperationContract]
         Task<bool> CheckProfessor(ProfessorSignInDTO professorSignInDTO);
+
+        [OperationContract]
+        Task<Professor> GetProfesor(string email);
+
+        [OperationContract]
+        Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);
     }
 }

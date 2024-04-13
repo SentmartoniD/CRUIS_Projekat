@@ -32,7 +32,7 @@ namespace StudentService
                     Id = 1,
                     FirstName = "Ana",
                     LastName = "Ivanovic",
-                    IndexNumber = "PR44/2019",
+                    IndexNumber = "PR44-2019",
                     Email = "ivanovic@uns.ac.rs",
                     Password = "ivanovic123",
                     SubjectIds = new List<int>{ 1, 2, 3, 4},
@@ -42,7 +42,7 @@ namespace StudentService
                     Id = 2,
                     FirstName = "Novak",
                     LastName = "Djokovic",
-                    IndexNumber = "PR46/2019",
+                    IndexNumber = "PR46-2019",
                     Email = "djokovic@uns.ac.rs",
                     Password = "djokovic123",
                     SubjectIds = new List<int>{ 1, 2, 3, 4},
@@ -52,7 +52,7 @@ namespace StudentService
                     Id = 3,
                     FirstName = "Donald",
                     LastName = "Trump",
-                    IndexNumber = "PR74/2019",
+                    IndexNumber = "PR74-2019",
                     Email = "trump@uns.ac.rs",
                     Password = "trump123",
                     SubjectIds = new List<int>{ 1, 2, 3, 4},
@@ -62,7 +62,7 @@ namespace StudentService
                     Id = 4,
                     FirstName = "Lionel",
                     LastName = "Messi",
-                    IndexNumber = "PR101/2019",
+                    IndexNumber = "PR101-2019",
                     Email = "messi@uns.ac.rs",
                     Password = "messi123",
                     SubjectIds = new List<int>{ 1, 2, 3, 4},
@@ -195,6 +195,54 @@ namespace StudentService
             {
 
                 await currentStudentDictionary.TryAddAsync(tx, newStudent.Id, newStudent);
+
+                await tx.CommitAsync();
+            }
+
+            return newStudent;
+        }
+
+        public async Task<Student> GetStudent(string indexNumber)
+        {
+            var currentStudentDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Student>>("currentStudentDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var studentEnumerator = (await currentStudentDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            Student myStudent = new Student();
+            while (await studentEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var student = studentEnumerator.Current;
+                if (student.Value.IndexNumber == indexNumber) 
+                {
+                    myStudent = student.Value;
+                    break;
+                }
+                    
+            }
+
+            return myStudent;
+        }
+
+        public async Task<Student> UpdateStudent(StudentUpdateDTO studentUpdateDTO)
+        {
+            var currentStudentDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Student>>("currentStudentDictionary");
+
+            Student newStudent = new Student
+            {
+                Id = studentUpdateDTO.Id,
+                FirstName = studentUpdateDTO.FirstName,
+                LastName = studentUpdateDTO.LastName,
+                IndexNumber = studentUpdateDTO.IndexNumber,
+                Email = studentUpdateDTO.Email,
+                Password = studentUpdateDTO.Password,
+            };
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+
+                await currentStudentDictionary.TryRemoveAsync(tx, newStudent.Id);
+
+                await currentStudentDictionary.AddAsync(tx, newStudent.Id, newStudent);
 
                 await tx.CommitAsync();
             }
