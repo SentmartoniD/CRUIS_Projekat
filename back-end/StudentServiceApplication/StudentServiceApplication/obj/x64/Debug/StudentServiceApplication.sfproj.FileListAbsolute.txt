@@ -1,0 +1,2 @@
+C:\Users\denes\OneDrive\Desktop\StudentServiceApplication\StudentServiceApplication\obj\x64\Debug\StudentServiceApplication.sfproj.CoreCompileInputs.cache
+C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\obj\x64\Debug\StudentServiceApplication.sfproj.CoreCompileInputs.cache
