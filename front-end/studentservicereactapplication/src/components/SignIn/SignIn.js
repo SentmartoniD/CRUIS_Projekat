@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { UserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { SigInStudent } from '../../services/StudentService';
+import { Link } from "react-router-dom";
 
 
 const SignIn = () => {
@@ -54,6 +55,8 @@ const SignIn = () => {
             <TextField required id='email' label="Email Address" onChange={(e) => setEmail(e.target.value)} ></TextField>
             <TextField required id='passwordProfessor' label="Password" onChange={(e) => setPassword(e.target.value)} ></TextField>
             <Button type='submit' variant='contained' onClick={handleLoginProfessor} >Sign in!</Button>
+
+            <Link to={"/signup"} >Dont have an account? Sign up!</Link>
         </div>
     )
 }

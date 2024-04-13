@@ -5,6 +5,7 @@ import SignInPage from "../pages/SignInPage/SignInPage"
 import NavigationBar from "../components/NavigationBar/NavigationBar";
 
 import { UserContext } from '../contexts/UserContext';
+import SignUpPage from "../pages/SignUpPage/SignUpPage";
 
 
 const AppRoutes = () => {
@@ -20,6 +21,7 @@ const AppRoutes = () => {
                 </Route>
             </Route>
            <Route path="/signin" element={currentUser ? <Navigate to="/"/> : <SignInPage/>} />
+           <Route path="/signup" element={<SignUpPage/>} />
         </Routes>
     )
 }
