@@ -5,11 +5,13 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { UserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { SigInStudent } from '../../services/StudentService';
 
 
 const SignIn = () => {
     const {setCurrentUser} = useContext(UserContext)
 
+    const [indexNumber, setIndexNumber] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -18,7 +20,19 @@ const SignIn = () => {
         navigate("/")
     }
     
-    const handleLogin = async () => {
+    const handleLoginStudent = async () => {
+        try{
+            const response = await SigInStudent(indexNumber, password);
+            const token = response.data
+            setCurrentUser(token)    
+            navigateToHome()
+        }
+        catch(err){
+            alert(err)
+        }
+    }
+
+    const handleLoginProfessor = async () => {
         try{
             const response = await SigInProfessor(email, password);
             const token = response.data
@@ -28,15 +42,18 @@ const SignIn = () => {
         catch(err){
             alert(err)
         }
-
     }
 
     return(
         <div>
             <Typography variant='h5'>Sign in!</Typography>
+            <TextField required id='indexNumber' label="Index number" onChange={(e) => setIndexNumber(e.target.value)} ></TextField>
+            <TextField required id='passwordStudent' label="Password" onChange={(e) => setPassword(e.target.value)} ></TextField>
+            <Button type='submit' variant='contained' onClick={handleLoginStudent} >Sign instudent!</Button>
+
             <TextField required id='email' label="Email Address" onChange={(e) => setEmail(e.target.value)} ></TextField>
-            <TextField required id='password' label="Password" onChange={(e) => setPassword(e.target.value)} ></TextField>
-            <Button type='submit' variant='contained' onClick={handleLogin} >Sign in!</Button>
+            <TextField required id='passwordProfessor' label="Password" onChange={(e) => setPassword(e.target.value)} ></TextField>
+            <Button type='submit' variant='contained' onClick={handleLoginProfessor} >Sign in!</Button>
         </div>
     )
 }

@@ -5,17 +5,19 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "StudentServiceApplication", "StudentServiceApplication\StudentServiceApplication.sfproj", "{8A09E5D0-ADCE-4612-B10E-4B714C830FEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{60FCB7BA-84C1-4F87-B80C-154E25B77F6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{60FCB7BA-84C1-4F87-B80C-154E25B77F6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication", "Communication\Communication.csproj", "{E2C01437-B9CB-4DBB-A47C-F109457A43C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication", "Communication\Communication.csproj", "{E2C01437-B9CB-4DBB-A47C-F109457A43C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{D3482538-1BB8-4295-84C1-B50E00666487}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{D3482538-1BB8-4295-84C1-B50E00666487}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationService", "ValidationService\ValidationService.csproj", "{28D2666E-6216-4CC7-8C5B-91DE9E60339E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValidationService", "ValidationService\ValidationService.csproj", "{28D2666E-6216-4CC7-8C5B-91DE9E60339E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{61532169-B65B-43AB-8835-3379CF2DA3DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{61532169-B65B-43AB-8835-3379CF2DA3DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfessorService", "ProfessorService\ProfessorService.csproj", "{FAE4DE83-93CA-40F8-830F-100EBE412243}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessorService", "ProfessorService\ProfessorService.csproj", "{FAE4DE83-93CA-40F8-830F-100EBE412243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentService", "StudentService\StudentService.csproj", "{899C92E4-8810-4234-A5B9-9824600FF6D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,14 @@ Global
 		{FAE4DE83-93CA-40F8-830F-100EBE412243}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAE4DE83-93CA-40F8-830F-100EBE412243}.Release|x64.ActiveCfg = Release|Any CPU
 		{FAE4DE83-93CA-40F8-830F-100EBE412243}.Release|x64.Build.0 = Release|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Debug|x64.Build.0 = Debug|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Release|x64.ActiveCfg = Release|Any CPU
+		{899C92E4-8810-4234-A5B9-9824600FF6D9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

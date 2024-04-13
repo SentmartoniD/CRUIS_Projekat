@@ -43,8 +43,12 @@ namespace AuthenticationService
 
         public async Task<bool> AuthenticateStudent(StudentSignInDTO studentSignInDTO)
         {
-            bool res = true;
-            // check in base index and HASH PASSWORD
+            var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+            FabricClient client = new FabricClient();
+            var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+            var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+            var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+            var res = await statefullProxy.CheckStudent(studentSignInDTO);
             return res;
         }
 

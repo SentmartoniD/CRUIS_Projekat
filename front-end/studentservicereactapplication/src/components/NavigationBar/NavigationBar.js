@@ -13,8 +13,6 @@ const NavigationBar = () => {
         const payloadObj = JSON.parse(decodedPayload);
         const userRole = payloadObj["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         setRole(userRole)
-        console.log(userRole)
-        console.log(currentUser)
     }, [])
 
     return (

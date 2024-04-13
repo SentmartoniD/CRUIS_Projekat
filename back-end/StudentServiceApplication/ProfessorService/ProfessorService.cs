@@ -132,11 +132,11 @@ namespace ProfessorService
             var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
 
             using var transaction = this.StateManager.CreateTransaction();
-            var professoEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
-            while (await professoEnumerator.MoveNextAsync(CancellationToken.None))
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
             {
-                var professor = professoEnumerator.Current;
+                var professor = professorEnumerator.Current;
                 if (professor.Value.Password == professorSignInDTO.Password && professor.Value.Email == professorSignInDTO.Email)
                     return true;
             }
