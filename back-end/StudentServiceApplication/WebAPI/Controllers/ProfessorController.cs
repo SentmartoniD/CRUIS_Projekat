@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
                 var res2 = await statelessAuthenticationServiceProxy.AuthenticateProfessor(professorSignInDTO);
                 if (res2 == false)
                     return StatusCode(400, new { Error = "Sign in failed!" });
-                var token = await statelessAuthenticationServiceProxy.IssueTokenForProfessor();
+                var token = await statelessAuthenticationServiceProxy.IssueTokenForProfessor(professorSignInDTO.Email);
 
                 return Ok(token);
             }

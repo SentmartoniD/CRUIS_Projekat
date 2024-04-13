@@ -17,13 +17,13 @@ namespace Communication
         Task<bool> AuthenticateStudent(StudentSignInDTO studentSignInDTO);
 
         [OperationContract]
-        Task<string> IssueTokenForStudent();
+        Task<string> IssueTokenForStudent(string indexNUmber);
 
         //professor
         [OperationContract]
         Task<bool> AuthenticateProfessor(ProfessorSignInDTO professorSignInDTO);
 
         [OperationContract]
-        Task<string> IssueTokenForProfessor();
+        Task<string> IssueTokenForProfessor(string email);
     }
 }

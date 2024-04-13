@@ -52,10 +52,11 @@ namespace AuthenticationService
             return res;
         }
 
-        public async Task<string> IssueTokenForProfessor()
+        public async Task<string> IssueTokenForProfessor(string email)
         {
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, "professor")); //Add user type to claim
+            claims.Add(new Claim(ClaimTypes.Role, "professor"));
+            claims.Add(new Claim("email", email));
             //Kreiramo kredencijale za potpisivanje tokena. Token mora biti potpisan privatnim kljucem
             //kako bi se sprecile njegove neovlascene izmene
             Microsoft.IdentityModel.Tokens.SymmetricSecurityKey secretKey =
@@ -72,10 +73,11 @@ namespace AuthenticationService
             return tokenString;
         }
 
-        public async Task<string> IssueTokenForStudent()
+        public async Task<string> IssueTokenForStudent(string indexNUmber)
         {
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, "student")); //Add user type to claim
+            claims.Add(new Claim(ClaimTypes.Role, "student"));
+            claims.Add(new Claim("indexNUmber", indexNUmber));
             //Kreiramo kredencijale za potpisivanje tokena. Token mora biti potpisan privatnim kljucem
             //kako bi se sprecile njegove neovlascene izmene
             Microsoft.IdentityModel.Tokens.SymmetricSecurityKey secretKey =

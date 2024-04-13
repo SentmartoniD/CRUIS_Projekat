@@ -166,5 +166,40 @@ namespace StudentService
 
             return false;
         }
+
+        public async Task<Student> AddStudent(StudentSignUpDTO studentSignUpDTO)
+        {
+            var currentStudentDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Student>>("currentStudentDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var studentEnumerator = (await currentStudentDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            int latestStudentId = 0;
+            while (await studentEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var student = studentEnumerator.Current;
+                if (student.Value.Id > latestStudentId)
+                    latestStudentId = student.Value.Id;
+            }
+
+            Student newStudent = new Student 
+            {
+                Id = latestStudentId + 1,
+                FirstName = studentSignUpDTO.FirstName,
+                LastName = studentSignUpDTO.LastName,
+                IndexNumber = studentSignUpDTO.IndexNumber,
+                Email = studentSignUpDTO.Email,
+                Password = studentSignUpDTO.Password,
+            };
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+
+                await currentStudentDictionary.TryAddAsync(tx, newStudent.Id, newStudent);
+
+                await tx.CommitAsync();
+            }
+
+            return newStudent;
+        }
     }
 }
