@@ -9,13 +9,15 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Models.Common;
 using Communication;
+using Models.DTO;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 
 namespace ProfessorService
 {
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class ProfessorService : StatefulService
+    internal sealed class ProfessorService : StatefulService, IProfessor
     {
         public ProfessorService(StatefulServiceContext context)
             : base(context)
@@ -86,7 +88,7 @@ namespace ProfessorService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            return this.CreateServiceRemotingReplicaListeners();
         }
 
         /// <summary>
@@ -123,6 +125,23 @@ namespace ProfessorService
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
+        }
+
+        public async Task<bool> CheckProfessor(ProfessorSignInDTO professorSignInDTO)
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professoEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await professoEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professoEnumerator.Current;
+                if (professor.Value.Password == professorSignInDTO.Password && professor.Value.Email == professorSignInDTO.Email)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

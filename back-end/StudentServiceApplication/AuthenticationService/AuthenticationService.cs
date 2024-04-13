@@ -36,9 +36,9 @@ namespace AuthenticationService
             var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
             var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
             var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
-            //var res = await statefullProxy.CheckProfessor(professorSignInDTO);
+            var res = await statefullProxy.CheckProfessor(professorSignInDTO);
 
-            return true;
+            return res;
         }
 
         public async Task<bool> AuthenticateStudent(StudentSignInDTO studentSignInDTO)
@@ -94,7 +94,7 @@ namespace AuthenticationService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            return this.CreateServiceRemotingInstanceListeners();
         }
 
         /// <summary>
