@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
                     return StatusCode(400, new { Error = "Sign in failed!" });
                 var token = await statelessAuthenticationServiceProxy.IssueTokenForProfessor();
 
-                return Ok(new { Data = token });
+                return Ok(token);
             }
             catch (Exception e)
             {
