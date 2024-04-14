@@ -16,10 +16,10 @@ namespace Communication
         //student
 
         [OperationContract]
-        Task<Student> AddStudent(StudentSignUpDTO studentSignUpDTO);
+        Task<Student> PrepareAddStudent(StudentSignUpDTO studentSignUpDTO);
 
         [OperationContract]
-        Task<Student> UpdateStudent(StudentUpdateDTO studentUpdateDTO);
+        Task<Student> PrepareUpdateStudent(StudentUpdateDTO studentUpdateDTO);
 
         [OperationContract]
         Task CommitStudent();
@@ -30,7 +30,7 @@ namespace Communication
         //professor
 
         [OperationContract]
-        Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);
+        Task<Professor> PrepareUpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);
 
         [OperationContract]
         Task CommitProfessor();
@@ -41,13 +41,13 @@ namespace Communication
         //subject
 
         [OperationContract]
-        Task AddStudentToSubject(int subjectId, int studentId);
+        Task PrepareAddStudentToSubject(int subjectId, int studentId);
 
         [OperationContract]
-        Task DeleteStudentFromSubject(int subjectId, int studentId);
+        Task PrepareDeleteStudentFromSubject(int subjectId, int studentId);
 
         [OperationContract]
-        Task ChangeGrade(int subjectId, int studentId, int grade);
+        Task PrepareChangeGrade(int subjectId, int studentId, int grade);
 
         [OperationContract]
         Task CommitSubject();
