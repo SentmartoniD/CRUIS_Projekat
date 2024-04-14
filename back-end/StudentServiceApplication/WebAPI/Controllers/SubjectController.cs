@@ -133,11 +133,11 @@ namespace WebAPI.Controllers
         [HttpGet]
         [Route("professor-all/{email}")]
         [Authorize(Roles = "professor")]
-        public async Task<ActionResult> AddUnAthendedSubject(string email)
+        public async Task<ActionResult> GetSubjectsForProfessor(string email)
         {
             try
             {
-                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/ProfessorService");
                 FabricClient client = new FabricClient();
                 var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
                 var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);

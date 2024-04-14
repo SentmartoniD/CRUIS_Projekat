@@ -236,10 +236,10 @@ namespace ProfessorService
             Professor myProfessor = new Professor();
             while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
             {
-                var student = professorEnumerator.Current;
-                if (student.Value.Email == email)
+                var professor = professorEnumerator.Current;
+                if (professor.Value.Email == email)
                 {
-                    myProfessor = student.Value;
+                    myProfessor = professor.Value;
                     break;
                 }
 

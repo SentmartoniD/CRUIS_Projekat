@@ -36,7 +36,7 @@ namespace SubjectService
                     Year = 5,
                     ProfessorId = 2,
                     StudentIds = new List<int>{ 1},
-                    StudentGrades = new List<int>{ 5},
+                    StudentGrades = new List<int>{ 8},
                 },
                 new Subject
                 {
@@ -44,8 +44,8 @@ namespace SubjectService
                     Name = "Inteligentni Softveri u Infrastrukturnim Sistemima",
                     Year = 5,
                     ProfessorId = 1,
-                    StudentIds = new List<int>{ 1},
-                    StudentGrades = new List<int>{ 8},
+                    StudentIds = new List<int>{ 1, 2, 3, 4},
+                    StudentGrades = new List<int>{ 5, 5, 9, 9},
                 },
                 new Subject
                 {
@@ -62,8 +62,8 @@ namespace SubjectService
                     Name = "Namenski Racunarski Sistemi",
                     Year = 3,
                     ProfessorId = 1,
-                    StudentIds = new List<int>(),
-                    StudentGrades = new List<int>(),
+                    StudentIds = new List<int>{2,3,4,5},
+                    StudentGrades = new List<int>{9,10,7,10},
                 }
             };
 
@@ -154,33 +154,31 @@ namespace SubjectService
             using var transaction = this.StateManager.CreateTransaction();
             var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
-            List<Student> studentList = new List<Student>();
+            List<int> grades = null;
             Student tempStudent = null;
 
             while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
             {
                 var subject = subjectEnumerator.Current;
-                for (int i = 0; i < subject.Value.StudentIds.Count; i++)
+                List<Student> studentList = new List<Student>();
+
+                if (subject.Value.ProfessorId == professorId)
                 {
-                    if (subject.Value.ProfessorId == professorId)
-                    {
-                        for (int j = 0; j < subject.Value.StudentIds.Count; j++) {
-                            var stud = students.Where(s => s.Id == subject.Value.StudentIds[i]).ToList();
-                            studentList.Add(new Student { Id = stud[0].Id,  FirstName = stud[0].FirstName, LastName = stud[0].LastName,
-                            IndexNumber = stud[0].IndexNumber, Email = stud[0].Email
-                            });
-                        }
-                        subjectList.Add(new SubjectFullDTO
-                        {
-                            Id = subject.Key,
-                            Name = subject.Value.Name,
-                            Year = subject.Value.Year,
-                            ProfessorId = subject.Value.ProfessorId,
-                            Students = studentList,
-                            StudentGrades = subject.Value.StudentGrades,
+                    for (int j = 0; j < subject.Value.StudentIds.Count; j++) {
+                        var stud = students.Where(s => s.Id == subject.Value.StudentIds[j]).ToList();
+                        studentList.Add(new Student { Id = stud[0].Id,  FirstName = stud[0].FirstName, LastName = stud[0].LastName,
+                        IndexNumber = stud[0].IndexNumber, Email = stud[0].Email
                         });
-                        studentList.Clear();
                     }
+                    subjectList.Add(new SubjectFullDTO
+                    {
+                        Id = subject.Key,
+                        Name = subject.Value.Name,
+                        Year = subject.Value.Year,
+                        ProfessorId = subject.Value.ProfessorId,
+                        Students = studentList,
+                        StudentGrades = subject.Value.StudentGrades,
+                    });
                 }
             }
 
