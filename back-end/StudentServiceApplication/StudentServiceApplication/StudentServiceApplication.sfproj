@@ -35,6 +35,7 @@
     <ProjectReference Include="..\AuthenticationService\AuthenticationService.csproj" />
     <ProjectReference Include="..\ProfessorService\ProfessorService.csproj" />
     <ProjectReference Include="..\StudentService\StudentService.csproj" />
+    <ProjectReference Include="..\SubjectService\SubjectService.csproj" />
     <ProjectReference Include="..\ValidationService\ValidationService.csproj" />
     <ProjectReference Include="..\WebAPI\WebAPI.csproj">
       <ServiceLaunchUrl>https://localhost:{ServicePort}/swagger</ServiceLaunchUrl>

@@ -43,10 +43,10 @@ const NavigationBar = () => {
                         <Link to={"/"} >My Profile</Link>
                     </li>
                     <li id="2" >
-                        <Link to={"/my-subjects"} >My Subjects</Link>
+                        <Link to={"/athended-subjects"} >Athended Subjects</Link>
                     </li>
                     <li id="3" >
-                        <Link to={"/all-subjects"} >All Subjects</Link>
+                        <Link to={"/unathended-subjects"} >Unathended Subjects</Link>
                     </li>
                     <li id="4" >
                         <Link to={"/signin"} onClick={handleSignOut} >Sign out!</Link>

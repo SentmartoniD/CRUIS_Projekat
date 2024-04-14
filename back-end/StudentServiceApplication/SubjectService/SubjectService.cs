@@ -35,8 +35,8 @@ namespace SubjectService
                     Name = "Cloud Racunarstvo u Infrastrukturnim Sistemima",
                     Year = 5,
                     ProfessorId = 2,
-                    StudentIds = new List<int>(1),
-                    StudentGrades = new List<int>(5),
+                    StudentIds = new List<int>{ 1},
+                    StudentGrades = new List<int>{ 5},
                 },
                 new Subject
                 {
@@ -44,8 +44,8 @@ namespace SubjectService
                     Name = "Inteligentni Softveri u Infrastrukturnim Sistemima",
                     Year = 5,
                     ProfessorId = 1,
-                    StudentIds = new List<int>(1),
-                    StudentGrades = new List<int>(8),
+                    StudentIds = new List<int>{ 1},
+                    StudentGrades = new List<int>{ 8},
                 },
                 new Subject
                 {
@@ -169,14 +169,20 @@ namespace SubjectService
                 var subject = subjectEnumerator.Current;
                 for (int i = 0; i < subject.Value.StudentIds.Count; i++) {
                     if (subject.Value.StudentIds[i] == studentId)
+                    {
+                        var professor = professors.Where(p => p.Id == subject.Value.ProfessorId).ToList();
                         subjectList.Add(new SubjectAthendedDTO
                         {
                             Id = subject.Key,
                             Name = subject.Value.Name,
                             Year = subject.Value.Year,
-                            Professor = (Professor)professors.Where(p => p.Id == subject.Value.ProfessorId),
+                            Professor = new Professor { 
+                                Id = professor[0].Id, Email = professor[0].Email,
+                                FirstName = professor[0].FirstName, LastName = professor[0].LastName,
+                                Password = professor[0].Password, SubjectIds = professor[0].SubjectIds},
                             Grade = subject.Value.StudentGrades[i],
                         });
+                    }
                 }
             }
 

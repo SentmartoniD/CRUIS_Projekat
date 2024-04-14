@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
     public class SubjectController : ControllerBase
     {
         [HttpGet]
-        [Route("athended")]
+        [Route("athended/{indexNumber}")]
         [Authorize(Roles = "student")]
         public async Task<ActionResult> GetAthended(string indexNUmber)
         {
