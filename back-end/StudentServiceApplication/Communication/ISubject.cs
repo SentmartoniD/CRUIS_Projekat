@@ -34,5 +34,8 @@ namespace Communication
         [OperationContract]
         Task DeleteStudentFromSubject(int subjectId, int studentId);
 
+        [OperationContract]
+        Task ChangeGrade(int subjectId, int studentId, int grade);
+
     }
 }

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { UserContext } from '../../contexts/UserContext'
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { GetSubjects } from '../../services/SubjectsService';
+import { ChangeGrade, GetSubjects } from '../../services/SubjectsService';
 
 const Subjects = () => {
     const {currentUser} = useContext(UserContext);
@@ -14,9 +14,19 @@ const Subjects = () => {
     const handleChange = async (subjectID) => {
         const { selectedStudent, selectedGrade } = selectedData[subjectID] || {};
         if (selectedStudent && selectedGrade) {
-            console.log(selectedStudent)
-            console.log(selectedGrade)
-            console.log(subjectID)
+            try{
+                const response = await ChangeGrade(subjectID, selectedStudent, selectedGrade, currentUser)
+                console.log(response)
+                setSelectedData((prevSelectedData) => {
+                    const newSelectedData = { ...prevSelectedData };
+                    delete newSelectedData[subjectID];
+                    return newSelectedData;
+                });
+            }
+            catch(err)
+            {
+                alert(err)
+            }
         } else {
             alert("Select a grade!");
         }
@@ -92,6 +102,7 @@ const Subjects = () => {
                                 }
                             </li>
                         </ul>
+                        <Typography variant='h6'>Students who are graded!</Typography>
                         <table>
                             <thead>
                                 <tr>

@@ -79,6 +79,56 @@ namespace ProfessorService
             }
         }
 
+        private async Task UpdateState()
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            var prevProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("prevProfessorDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await prevProfessorDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professorEnumerator.Current;
+                await prevProfessorDictionary.AddAsync(transaction, professor.Key, professor.Value);
+                await transaction.CommitAsync();
+            }
+
+        }
+
+        private async Task ReverseState()
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            var prevProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("prevProfessorDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentProfessorDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await prevProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professorEnumerator.Current;
+                await currentProfessorDictionary.AddAsync(transaction, professor.Key, professor.Value);
+                await transaction.CommitAsync();
+            }
+
+        }
+
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
         /// </summary>

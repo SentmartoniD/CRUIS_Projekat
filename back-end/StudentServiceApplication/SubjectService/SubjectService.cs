@@ -62,8 +62,8 @@ namespace SubjectService
                     Name = "Namenski Racunarski Sistemi",
                     Year = 3,
                     ProfessorId = 1,
-                    StudentIds = new List<int>{2,3,4,5},
-                    StudentGrades = new List<int>{9,10,7,10},
+                    StudentIds = new List<int>{2,3,4,5,1},
+                    StudentGrades = new List<int>{9,10,7,10,5},
                 }
             };
 
@@ -88,6 +88,56 @@ namespace SubjectService
                 }
                 await tx.CommitAsync();
             }
+        }
+
+        private async Task UpdateState()
+        {
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await prevSubjectDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                await prevSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
+                await transaction.CommitAsync();
+            }
+
+        }
+
+        private async Task ReverseState()
+        {
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentSubjectDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await prevSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                await currentSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
+                await transaction.CommitAsync();
+            }
+
         }
 
         /// <summary>
@@ -346,6 +396,42 @@ namespace SubjectService
             }
 
             return ;
+        }
+
+        public async Task ChangeGrade(int subjectId, int studentId, int grade)
+        {
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            Subject newSubject = null;
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                if (subject.Key == subjectId)
+                {
+                    newSubject = subject.Value;
+                    break;
+                }
+            }
+            for (int i = 0; i < newSubject.StudentIds.Count; i++)
+            {
+                if (newSubject.StudentIds[i] == studentId)
+                {
+                    newSubject.StudentGrades[i]=grade;
+                }
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentSubjectDictionary.TryRemoveAsync(tx, newSubject.Id);
+
+                await currentSubjectDictionary.AddAsync(tx, newSubject.Id, newSubject);
+
+                await tx.CommitAsync();
+            }
         }
     }
 }

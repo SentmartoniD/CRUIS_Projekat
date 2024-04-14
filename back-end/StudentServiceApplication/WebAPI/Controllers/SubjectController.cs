@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
+using Models.Common;
 using Models.DTO;
 using System.Data;
 using System.Fabric;
@@ -152,6 +153,28 @@ namespace WebAPI.Controllers
                 var subjects = await statefullProxySubject.GetSubjectsForProfessor(professor.Id);
 
                 return Ok(subjects);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("change-grade/{subjectId}/{studentId}/{grade}")]
+        [Authorize(Roles = "professor")]
+        public async Task<ActionResult> ChangeGrade(int subjectId, int studentId, int grade )
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
+                var client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
+                await statefullProxySubject.ChangeGrade(subjectId, studentId, grade);
+
+                return Ok();
             }
             catch (Exception e)
             {

@@ -27,3 +27,7 @@ export const AddUnAthendedSubject = async (id, idxnmb, token) => {
 export const GetSubjects = async (email, token) => {
     return await axios.get(`${process.env.REACT_APP_API_URL}/api/subject/professor-all/`+email, GetConfig(token))
 }
+
+export const ChangeGrade = async (subjectId, studentId, grade, token) => {
+    return await axios.get(`${process.env.REACT_APP_API_URL}/api/subject/change-grade/`+subjectId+"/"+studentId +"/"+grade, GetConfig(token))
+}
