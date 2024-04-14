@@ -27,5 +27,11 @@ namespace Communication
 
         [OperationContract]
         Task<List<Student>> GetStudents();
+
+        [OperationContract]
+        Task UpdateState();
+
+        [OperationContract]
+        Task ReverseState();
     }
 }

@@ -90,55 +90,6 @@ namespace SubjectService
             }
         }
 
-        private async Task UpdateState()
-        {
-            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
-
-            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
-
-
-            using (var tx = this.StateManager.CreateTransaction())
-            {
-                await prevSubjectDictionary.ClearAsync();
-                await tx.CommitAsync();
-            }
-
-            using var transaction = this.StateManager.CreateTransaction();
-            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
-
-            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
-            {
-                var subject = subjectEnumerator.Current;
-                await prevSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
-                await transaction.CommitAsync();
-            }
-
-        }
-
-        private async Task ReverseState()
-        {
-            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
-
-            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
-
-
-            using (var tx = this.StateManager.CreateTransaction())
-            {
-                await currentSubjectDictionary.ClearAsync();
-                await tx.CommitAsync();
-            }
-
-            using var transaction = this.StateManager.CreateTransaction();
-            var subjectEnumerator = (await prevSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
-            
-            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
-            {
-                var subject = subjectEnumerator.Current;
-                await currentSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
-                await transaction.CommitAsync();
-            }
-
-        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
@@ -320,11 +271,6 @@ namespace SubjectService
             return subjectList;
         }
 
-        public Task<Subject> UpdateGradesForSubject(int subjectId, List<int> grades)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task AddStudentToSubject(int subjectId, int studentId)
         {
             var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
@@ -431,6 +377,54 @@ namespace SubjectService
                 await currentSubjectDictionary.AddAsync(tx, newSubject.Id, newSubject);
 
                 await tx.CommitAsync();
+            }
+        }
+
+        public async Task UpdateState()
+        {
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await prevSubjectDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                await prevSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
+                await transaction.CommitAsync();
+            }
+        }
+
+        public async Task ReverseState()
+        {
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            var prevSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("prevSubjectDictionary");
+
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentSubjectDictionary.ClearAsync();
+                await tx.CommitAsync();
+            }
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await prevSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                await currentSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
+                await transaction.CommitAsync();
             }
         }
     }

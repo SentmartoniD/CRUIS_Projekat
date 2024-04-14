@@ -1,27 +1,44 @@
 ﻿using Microsoft.ServiceFabric.Services.Remoting;
+using Models.Common;
+using Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Models.Common;
-using Models.DTO;
 
 namespace Communication
 {
     [ServiceContract]
-    public interface ISubject : IService
+    public interface ITransactionCoordinator : IService
     {
-        [OperationContract]
-        Task<List<SubjectFullDTO>> GetSubjectsForProfessor(int professorId);
+        //student
 
         [OperationContract]
-        Task<List<SubjectAthendedDTO>> GetUnathendedSubjectsForStudent(int studentId);
+        Task<Student> AddStudent(StudentSignUpDTO studentSignUpDTO);
 
         [OperationContract]
-        Task<List<SubjectAthendedDTO>> GetAthendedSubjectsForStudent(int studentId);
+        Task<Student> UpdateStudent(StudentUpdateDTO studentUpdateDTO);
+
+        [OperationContract]
+        Task CommitStudent();
+
+        [OperationContract]
+        Task RollbackStudent();
+
+        //professor
+
+        [OperationContract]
+        Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);
+
+        [OperationContract]
+        Task CommitProfessor();
+
+        [OperationContract]
+        Task RollbackProfessor();
+
+        //subject
 
         [OperationContract]
         Task AddStudentToSubject(int subjectId, int studentId);
@@ -33,10 +50,9 @@ namespace Communication
         Task ChangeGrade(int subjectId, int studentId, int grade);
 
         [OperationContract]
-        Task UpdateState();
+        Task CommitSubject();
 
         [OperationContract]
-        Task ReverseState();
-
+        Task RollbackSubject();
     }
 }

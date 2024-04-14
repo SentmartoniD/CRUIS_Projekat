@@ -30,5 +30,13 @@ namespace Communication
 
         [OperationContract]
         Task<Professor> GetProfessor(string email);
+
+        [OperationContract]
+        Task UpdateState();
+
+        [OperationContract]
+        Task ReverseState();
+
+
     }
 }
