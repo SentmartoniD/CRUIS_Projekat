@@ -35,7 +35,7 @@ namespace StudentService
                     IndexNumber = "PR44-2019",
                     Email = "ivanovic@uns.ac.rs",
                     Password = "ivanovic123",
-                    SubjectIds = new List<int>{ 1, 2, 3, 4},
+                    SubjectIds = new List<int>{1,2,},
                 },
                 new Student
                 {
@@ -45,7 +45,7 @@ namespace StudentService
                     IndexNumber = "PR46-2019",
                     Email = "djokovic@uns.ac.rs",
                     Password = "djokovic123",
-                    SubjectIds = new List<int>{ 1, 2, 3, 4},
+                    SubjectIds = new List<int>{},
                 },
                 new Student
                 {
@@ -55,7 +55,7 @@ namespace StudentService
                     IndexNumber = "PR74-2019",
                     Email = "trump@uns.ac.rs",
                     Password = "trump123",
-                    SubjectIds = new List<int>{ 1, 2, 3, 4},
+                    SubjectIds = new List<int>{},
                 },
                 new Student
                 {
@@ -65,7 +65,7 @@ namespace StudentService
                     IndexNumber = "PR101-2019",
                     Email = "messi@uns.ac.rs",
                     Password = "messi123",
-                    SubjectIds = new List<int>{ 1, 2, 3, 4},
+                    SubjectIds = new List<int>{ },
                 },
                 new Student
                 {

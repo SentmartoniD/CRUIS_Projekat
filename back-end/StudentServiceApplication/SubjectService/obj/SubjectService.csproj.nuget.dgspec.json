@@ -1,0 +1,229 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\SubjectService\\SubjectService.csproj": {}
+  },
+  "projects": {
+    "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\Communication.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\Communication.csproj",
+        "projectName": "Communication",
+        "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\Communication.csproj",
+        "packagesPath": "C:\\Users\\denes\\.nuget\\packages\\",
+        "outputPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\denes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj": {
+                "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.ServiceFabric.Services.Remoting": {
+              "target": "Package",
+              "version": "[7.0.1816, )"
+            },
+            "System.ServiceModel.Primitives": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj",
+        "projectName": "Models",
+        "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj",
+        "packagesPath": "C:\\Users\\denes\\.nuget\\packages\\",
+        "outputPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\denes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\SubjectService\\SubjectService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\SubjectService\\SubjectService.csproj",
+        "projectName": "SubjectService",
+        "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\SubjectService\\SubjectService.csproj",
+        "packagesPath": "C:\\Users\\denes\\.nuget\\packages\\",
+        "outputPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\SubjectService\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\denes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\Communication.csproj": {
+                "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Communication\\Communication.csproj"
+              },
+              "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj": {
+                "projectPath": "C:\\egyetem\\master\\Cloud\\CRUIS_Projekat\\back-end\\StudentServiceApplication\\Models\\Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.ServiceFabric.Services": {
+              "target": "Package",
+              "version": "[7.0.1816, )"
+            },
+            "Microsoft.ServiceFabric.Services.Remoting": {
+              "target": "Package",
+              "version": "[7.0.1816, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+              "version": "[6.0.18, 6.0.18]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x64",
+              "version": "[6.0.18, 6.0.18]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+              "version": "[6.0.18, 6.0.18]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win7-x64": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

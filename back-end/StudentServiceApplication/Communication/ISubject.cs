@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Models.Common;
+using Models.DTO;
 
 namespace Communication
 {
@@ -20,7 +21,7 @@ namespace Communication
         Task<List<Subject>> GetUnathendedSubjectsForStudent(int studentId);
 
         [OperationContract]
-        Task<List<Subject>> GetAthendedSubjectsForStudent(int studentId);
+        Task<List<SubjectAthendedDTO>> GetAthendedSubjectsForStudent(int studentId);
 
 
         [OperationContract]

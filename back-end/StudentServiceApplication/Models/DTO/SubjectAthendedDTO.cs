@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models.DTO
 {
-    public class SubjectDTO
+    public class SubjectAthendedDTO
     {
         public int Id { get; set; }
 
@@ -15,10 +15,8 @@ namespace Models.DTO
 
         public int Year { get; set; }
 
-        public int ProfessorId { get; set; }
+        public Professor Professor { get; set; }
 
-        public List<Student> Students { get; set; }
-
-        public List<int> StudentGrades { get; set; }
+        public int Grade { get; set; }
     }
 }

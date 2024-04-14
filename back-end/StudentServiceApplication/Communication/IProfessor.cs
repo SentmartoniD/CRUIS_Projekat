@@ -17,7 +17,13 @@ namespace Communication
         Task<bool> CheckProfessor(ProfessorSignInDTO professorSignInDTO);
 
         [OperationContract]
-        Task<Professor> GetProfesor(string email);
+        Task<Professor> GetProfesorByEmail(string email);
+
+        [OperationContract]
+        Task<Professor> GetProfesorById(int id);
+
+        [OperationContract]
+        Task<List<Professor>> GetProfessors();
 
         [OperationContract]
         Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);

@@ -144,7 +144,7 @@ namespace ProfessorService
             return false;
         }
 
-        public async Task<Professor> GetProfesor(string email)
+        public async Task<Professor> GetProfesorByEmail(string email)
         {
             var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
 
@@ -189,6 +189,42 @@ namespace ProfessorService
             }
 
             return newProfessor;
+        }
+
+        public async Task<Professor> GetProfesorById(int id)
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            Professor myProfessor = new Professor();
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professorEnumerator.Current;
+                if (professor.Value.Id == id)
+                {
+                    myProfessor = professor.Value;
+                    break;
+                }
+
+            }
+
+            return myProfessor;
+        }
+
+        public async Task<List<Professor>> GetProfessors()
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+            List<Professor> professors = new List<Professor>();
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var professor = professorEnumerator.Current;
+                professors.Add(professor.Value);
+            }
+
+            return professors;
         }
     }
 }

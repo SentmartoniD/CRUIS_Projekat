@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models.Common;
 
-namespace Models.Common
+namespace Models.DTO
 {
-    public class Subject
+    public class SubjectFullDTO
     {
         public int Id { get; set; }
 
@@ -14,11 +15,10 @@ namespace Models.Common
 
         public int Year { get; set; }
 
-        public int ProfessorId { get; set; }
+        public Professor Professor { get; set; }
 
-        public List<int> StudentIds { get; set; }
+        public List<Student> Students { get; set; }
 
         public List<int> StudentGrades { get; set; }
-
     }
 }

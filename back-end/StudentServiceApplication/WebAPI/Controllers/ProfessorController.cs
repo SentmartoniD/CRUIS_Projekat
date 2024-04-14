@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
                 var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
                 var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
                 var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
-                var professor = await statefullProxy.GetProfesor(email);
+                var professor = await statefullProxy.GetProfesorByEmail(email);
 
                 return Ok(professor);
             }
