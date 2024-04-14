@@ -58,17 +58,23 @@ namespace WebAPI.Controllers
                 var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
                 var student = await statefullProxy.GetStudent(indexNUmber);
 
-                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
-                client = new FabricClient();
-                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
-                await statefullProxySubject.DeleteStudentFromSubject(subjectId, student.Id);
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                await statelessServiceProxy.PrepareDeleteStudentFromSubject(subjectId, student.Id);
+
+                //commit
+                await statelessServiceProxy.CommitSubject();
 
                 return Ok();
             }
             catch (Exception e)
             {
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackSubject();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }
@@ -116,17 +122,23 @@ namespace WebAPI.Controllers
                 var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
                 var student = await statefullProxy.GetStudent(indexNUmber);
 
-                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
-                client = new FabricClient();
-                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
-                await statefullProxySubject.AddStudentToSubject(subjectId, student.Id);
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                await statelessServiceProxy.PrepareAddStudentToSubject(subjectId, student.Id);
+
+                //commit
+                await statelessServiceProxy.CommitSubject();
 
                 return Ok();
             }
             catch (Exception e)
             {
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                        new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackSubject();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }
@@ -167,17 +179,23 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
-                var client = new FabricClient();
-                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
-                await statefullProxySubject.ChangeGrade(subjectId, studentId, grade);
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                await statelessServiceProxy.PrepareChangeGrade(subjectId, studentId, grade);
+
+                //commit
+                await statelessServiceProxy.CommitSubject();
 
                 return Ok();
             }
             catch (Exception e)
             {
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                        new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackSubject();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }

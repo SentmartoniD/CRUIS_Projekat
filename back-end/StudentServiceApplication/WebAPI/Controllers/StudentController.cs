@@ -52,17 +52,24 @@ namespace WebAPI.Controllers
                 var res = await statelessValidationServiceProxy.ValidateStudentSignUp(studentSignUpDTO);
                 if (res == false)
                     return StatusCode(400, new { Error = "Sign up failed!" });
-                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
-                FabricClient client = new FabricClient();
-                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
-                var newStudent = await statefullProxy.AddStudent(studentSignUpDTO);
+
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                var newStudent = await statelessServiceProxy.PrepareAddStudent(studentSignUpDTO);
+
+                //commit
+                await statelessServiceProxy.CommitStudent();
 
                 return Ok(new { Data = newStudent });
             }
             catch (Exception e)
             {
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                         new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackStudent();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }
@@ -96,17 +103,23 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
-                FabricClient client = new FabricClient();
-                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
-                var student = await statefullProxy.UpdateStudent(studentUpdateDTO);
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                var student = await statelessServiceProxy.PrepareUpdateStudent(studentUpdateDTO);
+
+                //commit
+                await statelessServiceProxy.CommitStudent();
 
                 return Ok(student);
             }
             catch (Exception e)
             {
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                        new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackStudent();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }

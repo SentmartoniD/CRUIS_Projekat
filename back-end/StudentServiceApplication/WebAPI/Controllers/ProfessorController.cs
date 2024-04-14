@@ -70,17 +70,23 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/ProfessorService");
-                FabricClient client = new FabricClient();
-                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
-                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
-                var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
-                var student = await statefullProxy.UpdateProfessor(professorUpdateDTO);
+                //prepare
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                var professor = await statelessServiceProxy.PrepareUpdateProfessor(professorUpdateDTO);
 
-                return Ok(student);
+                //commit
+                await statelessServiceProxy.CommitProfessor();
+
+                return Ok(professor);
             }
             catch (Exception e)
-            {
+            {    
+                var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
+                    new Uri("fabric:/StudentServiceApplication/TransactionCoordinatorService"));
+                //rollback
+                await statelessServiceProxy.RollbackProfessor();
+
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }
