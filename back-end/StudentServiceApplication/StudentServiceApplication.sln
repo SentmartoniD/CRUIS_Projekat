@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentService", "StudentSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubjectService", "SubjectService\SubjectService.csproj", "{3F174829-E141-4D35-A238-C7D08D04D2FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionCoordinatorService", "TransactionCoordinatorService\TransactionCoordinatorService.csproj", "{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,14 @@ Global
 		{3F174829-E141-4D35-A238-C7D08D04D2FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F174829-E141-4D35-A238-C7D08D04D2FA}.Release|x64.ActiveCfg = Release|Any CPU
 		{3F174829-E141-4D35-A238-C7D08D04D2FA}.Release|x64.Build.0 = Release|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Debug|x64.Build.0 = Debug|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Release|x64.ActiveCfg = Release|Any CPU
+		{65BE29E3-4E3B-4ACA-82A2-A24108233BFB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
