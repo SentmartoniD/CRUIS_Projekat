@@ -24,5 +24,8 @@ namespace Communication
 
         [OperationContract]
         Task<Student> UpdateStudent(StudentUpdateDTO studentUpdateDTO);
+
+        [OperationContract]
+        Task<List<Student>> GetStudents();
     }
 }

@@ -50,7 +50,7 @@ namespace SubjectService
                 new Subject
                 {
                     Id = 3,
-                    Name = "Matematicka Abaliza",
+                    Name = "Matematicka Analiza",
                     Year = 1,
                     ProfessorId = 3,
                     StudentIds = new List<int>(),
@@ -138,14 +138,97 @@ namespace SubjectService
             }
         }
 
-        public Task<List<Subject>> GetSubjectsForProfessor(int professorId)
+        public async Task<List<SubjectFullDTO>> GetSubjectsForProfessor(int professorId)
         {
-            throw new NotImplementedException();
+            var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+            FabricClient client = new FabricClient();
+            var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+            var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+            var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+            var students = await statefullProxy.GetStudents();
+
+            List<SubjectFullDTO> subjectList = new List<SubjectFullDTO>();
+
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            List<Student> studentList = new List<Student>();
+            Student tempStudent = null;
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                for (int i = 0; i < subject.Value.StudentIds.Count; i++)
+                {
+                    if (subject.Value.ProfessorId == professorId)
+                    {
+                        for (int j = 0; j < subject.Value.StudentIds.Count; j++) {
+                            var stud = students.Where(s => s.Id == subject.Value.StudentIds[i]).ToList();
+                            studentList.Add(new Student { Id = stud[0].Id,  FirstName = stud[0].FirstName, LastName = stud[0].LastName,
+                            IndexNumber = stud[0].IndexNumber, Email = stud[0].Email
+                            });
+                        }
+                        subjectList.Add(new SubjectFullDTO
+                        {
+                            Id = subject.Key,
+                            Name = subject.Value.Name,
+                            Year = subject.Value.Year,
+                            ProfessorId = subject.Value.ProfessorId,
+                            Students = studentList,
+                            StudentGrades = subject.Value.StudentGrades,
+                        });
+                        studentList.Clear();
+                    }
+                }
+            }
+
+            return subjectList;
         }
 
-        public Task<List<Subject>> GetUnathendedSubjectsForStudent(int studentId)
+        public async Task<List<SubjectAthendedDTO>> GetUnathendedSubjectsForStudent(int studentId)
         {
-            throw new NotImplementedException();
+            var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/ProfessorService");
+            FabricClient client = new FabricClient();
+            var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+            var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+            var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
+            var professors = await statefullProxy.GetProfessors();
+
+            List<SubjectAthendedDTO> subjectList = new List<SubjectAthendedDTO>();
+
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                if (!subject.Value.StudentIds.Contains(studentId)) 
+                {
+                    var professor = professors.Where(p => p.Id == subject.Value.ProfessorId).ToList();
+                    subjectList.Add(new SubjectAthendedDTO
+                    {
+                        Id = subject.Key,
+                        Name = subject.Value.Name,
+                        Year = subject.Value.Year,
+                        Professor = new Professor
+                        {
+                            Id = professor[0].Id,
+                            Email = professor[0].Email,
+                            FirstName = professor[0].FirstName,
+                            LastName = professor[0].LastName,
+                            Password = professor[0].Password,
+                            SubjectIds = professor[0].SubjectIds
+                        },
+                        Grade = 5,
+                    });
+                }
+            }
+
+            return subjectList;
         }
 
         public async Task<List<SubjectAthendedDTO>> GetAthendedSubjectsForStudent(int studentId)
@@ -194,14 +277,77 @@ namespace SubjectService
             throw new NotImplementedException();
         }
 
-        public Task AddStudentToSubject(int subjectId, int studentId)
+        public async Task AddStudentToSubject(int subjectId, int studentId)
         {
-            throw new NotImplementedException();
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            Subject newSubject = null;
+            int maxId = 0;
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                if (subject.Key == subjectId)
+                {
+                    newSubject = subject.Value;
+                    break;
+                }
+            }
+            
+            newSubject.StudentIds.Add(studentId);
+            newSubject.StudentGrades.Add(5);
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentSubjectDictionary.TryRemoveAsync(tx, newSubject.Id);
+
+                await currentSubjectDictionary.AddAsync(tx, newSubject.Id, newSubject);
+
+                await tx.CommitAsync();
+            }
+
+            return;
         }
 
-        public Task DeleteStudentFromSubject(int subjectId, int studentId)
+        public async Task DeleteStudentFromSubject(int subjectId, int studentId)
         {
-            throw new NotImplementedException();
+            var currentSubjectDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Subject>>("currentSubjectDictionary");
+
+            Subject newSubject = null;
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+
+            while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var subject = subjectEnumerator.Current;
+                if (subject.Key == subjectId)
+                {
+                    newSubject = subject.Value;
+                    break;
+                }
+            }
+            for (int i = 0; i < newSubject.StudentIds.Count; i++) {
+                if (newSubject.StudentIds[i] == studentId) 
+                {
+                    newSubject.StudentIds.RemoveAt(i);
+                    newSubject.StudentGrades.RemoveAt(i);
+                }
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                await currentSubjectDictionary.TryRemoveAsync(tx, newSubject.Id);
+
+                await currentSubjectDictionary.AddAsync(tx, newSubject.Id, newSubject);
+
+                await tx.CommitAsync();
+            }
+
+            return ;
         }
     }
 }

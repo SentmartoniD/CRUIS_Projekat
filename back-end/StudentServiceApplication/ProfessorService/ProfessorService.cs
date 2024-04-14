@@ -226,5 +226,26 @@ namespace ProfessorService
 
             return professors;
         }
+
+        public async Task<Professor> GetProfessor(string email)
+        {
+            var currentProfessorDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Professor>>("currentProfessorDictionary");
+
+            using var transaction = this.StateManager.CreateTransaction();
+            var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            Professor myProfessor = new Professor();
+            while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var student = professorEnumerator.Current;
+                if (student.Value.Email == email)
+                {
+                    myProfessor = student.Value;
+                    break;
+                }
+
+            }
+
+            return myProfessor;
+        }
     }
 }

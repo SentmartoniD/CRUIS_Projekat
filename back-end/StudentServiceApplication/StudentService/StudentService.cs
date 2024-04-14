@@ -249,5 +249,20 @@ namespace StudentService
 
             return newStudent;
         }
+
+        public async Task<List<Student>> GetStudents()
+        {
+            var currentStudentDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<int, Student>>("currentStudentDictionary");
+            List<Student> students = new List<Student>();
+            using var transaction = this.StateManager.CreateTransaction();
+            var studentEnumerator = (await currentStudentDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
+            while (await studentEnumerator.MoveNextAsync(CancellationToken.None))
+            {
+                var student = studentEnumerator.Current;
+                students.Add(student.Value);
+            }
+
+            return students;
+        }
     }
 }

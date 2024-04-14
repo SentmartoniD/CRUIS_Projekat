@@ -42,5 +42,121 @@ namespace WebAPI.Controllers
                 return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
             }
         }
+
+        [HttpGet]
+        [Route("athended-remove/{subjectId}/{indexNumber}")]
+        [Authorize(Roles = "student")]
+        public async Task<ActionResult> RemoveAthendedSubject(int subjectId, string indexNUmber)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.GetStudent(indexNUmber);
+
+                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
+                client = new FabricClient();
+                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
+                await statefullProxySubject.DeleteStudentFromSubject(subjectId, student.Id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("unathended/{indexNumber}")]
+        [Authorize(Roles = "student")]
+        public async Task<ActionResult> GetUnAthended(string indexNUmber)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.GetStudent(indexNUmber);
+
+                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
+                client = new FabricClient();
+                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
+                var subjects = await statefullProxySubject.GetUnathendedSubjectsForStudent(student.Id);
+
+                return Ok(subjects);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("unathended-add/{subjectId}/{indexNumber}")]
+        [Authorize(Roles = "student")]
+        public async Task<ActionResult> AddUnAthendedSubject(int subjectId, string indexNUmber)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IStudent>(statefulServiceUri, partitionKey);
+                var student = await statefullProxy.GetStudent(indexNUmber);
+
+                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
+                client = new FabricClient();
+                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
+                await statefullProxySubject.AddStudentToSubject(subjectId, student.Id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("professor-all/{email}")]
+        [Authorize(Roles = "professor")]
+        public async Task<ActionResult> AddUnAthendedSubject(string email)
+        {
+            try
+            {
+                var statefulServiceUri = new Uri("fabric:/StudentServiceApplication/StudentService");
+                FabricClient client = new FabricClient();
+                var statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                var partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxy = ServiceProxy.Create<IProfessor>(statefulServiceUri, partitionKey);
+                var professor = await statefullProxy.GetProfessor(email);
+
+                statefulServiceUri = new Uri("fabric:/StudentServiceApplication/SubjectService");
+                client = new FabricClient();
+                statefulServicePartitionKeyList = await client.QueryManager.GetPartitionListAsync(statefulServiceUri);
+                partitionKey = new ServicePartitionKey((statefulServicePartitionKeyList[0].PartitionInformation as Int64RangePartitionInformation).LowKey);
+                var statefullProxySubject = ServiceProxy.Create<ISubject>(statefulServiceUri, partitionKey);
+                var subjects = await statefullProxySubject.GetSubjectsForProfessor(professor.Id);
+
+                return Ok(subjects);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+            }
+        }
     }
 }

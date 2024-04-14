@@ -15,10 +15,10 @@ namespace Communication
     public interface ISubject : IService
     {
         [OperationContract]
-        Task<List<Subject>> GetSubjectsForProfessor(int professorId);
+        Task<List<SubjectFullDTO>> GetSubjectsForProfessor(int professorId);
 
         [OperationContract]
-        Task<List<Subject>> GetUnathendedSubjectsForStudent(int studentId);
+        Task<List<SubjectAthendedDTO>> GetUnathendedSubjectsForStudent(int studentId);
 
         [OperationContract]
         Task<List<SubjectAthendedDTO>> GetAthendedSubjectsForStudent(int studentId);

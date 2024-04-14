@@ -15,7 +15,7 @@ namespace Models.DTO
 
         public int Year { get; set; }
 
-        public Professor Professor { get; set; }
+        public int ProfessorId { get; set; }
 
         public List<Student> Students { get; set; }
 

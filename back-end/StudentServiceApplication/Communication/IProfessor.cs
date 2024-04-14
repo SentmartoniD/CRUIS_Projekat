@@ -27,5 +27,8 @@ namespace Communication
 
         [OperationContract]
         Task<Professor> UpdateProfessor(ProfessorUpdateDTO professorUpdateDTO);
+
+        [OperationContract]
+        Task<Professor> GetProfessor(string email);
     }
 }
