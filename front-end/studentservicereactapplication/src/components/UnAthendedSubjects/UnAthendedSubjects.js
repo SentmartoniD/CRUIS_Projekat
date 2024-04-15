@@ -4,6 +4,7 @@ import { UserContext } from '../../contexts/UserContext'
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { GetUnAthendedSubjects, AddUnAthendedSubject } from '../../services/SubjectsService';
+import './UnAthendedSubjects.css'
 
 const UnAthendedSubjects = () => {
     const {currentUser} = useContext(UserContext);
@@ -57,14 +58,14 @@ const UnAthendedSubjects = () => {
             <Typography variant='h5' >All subjects!</Typography>
             <div>
                 {subjects.length === 0 ? <h5>No subjects!</h5> : (
-                    <ul>
+                    <ul className="ul-comp" >
                         {subjects.map((subject) => (
-                            <li id={subject.id} >
+                            <li id={subject.id} className="li-comp">
                                 <label>Naziv : {subject.name}</label>
                                 <label>Godina odrzavanja : {subject.year}</label>
                                 <label>Professor : {subject.professor.firstName + " " + subject.professor.lastName}</label>
                                 <label>Email : {subject.professor.email}</label>
-                                <Button variant='contained' onClick={() => handleChange(subject.id)} >Prijavi se!</Button>
+                                <Button style={{ width: '120px' }} variant='contained' onClick={() => handleChange(subject.id)} >Prijavi se!</Button>
                             </li>
                         ))}
                     </ul>

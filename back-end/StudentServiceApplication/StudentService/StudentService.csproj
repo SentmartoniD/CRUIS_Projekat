@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="7.0.1816" />
     <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="7.0.1816" />
   </ItemGroup>

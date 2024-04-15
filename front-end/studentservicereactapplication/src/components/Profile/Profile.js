@@ -99,7 +99,7 @@ const Profile = () => {
     return (
         <div>
             {user && (
-                <Box display="flex" flexDirection="column" alignItems="center" margin="200px auto" border={1} borderRadius={5} borderColor="primary.main" p={2} width={350} height={550} >
+                <Box display="flex" flexDirection="column" alignItems="center" margin="200px auto" border={1} borderRadius={5} borderColor="primary.main" p={2} width={350} height={600} >
                     <ThemeProvider theme={theme}>
                         <Typography color="primary" variant='h5'>My Profile!</Typography>
                     </ThemeProvider>

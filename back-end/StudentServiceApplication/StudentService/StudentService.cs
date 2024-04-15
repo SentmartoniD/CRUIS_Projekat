@@ -11,6 +11,8 @@ using Models.Common;
 using Communication;
 using Models.DTO;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Azure.Data.Tables.Models;
+using Azure.Data.Tables;
 
 namespace StudentService
 {
@@ -25,6 +27,39 @@ namespace StudentService
 
         private async Task Initialize()
         {
+            /*
+            string connectionString = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;";
+
+            TableServiceClient tableServiceClient = new(connectionString);
+
+            TableItem tableItem = await tableServiceClient.CreateTableIfNotExistsAsync("Student");
+            TableClient studentClient = tableServiceClient.GetTableClient("Student");
+
+            using var transaction = this.StateManager.CreateTransaction();
+
+            await foreach (var entity in studentClient.QueryAsync<Student>(e => e.p == "User"))
+            {
+                yield return entity;
+            }
+
+            await foreach (var user in studentClient.RetrieveAllAsync("User"))
+            {
+                var userVal = new User
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Birthday = user.Birthday,
+                    Address = user.Address
+                };
+                await userDictionary.AddOrUpdateAsync(transaction, user.Id, userVal, (k, v) => userVal);
+            }
+            await transaction.CommitAsync();
+            */
+
             var students = new List<Student>
             {
                 new Student
@@ -316,11 +351,21 @@ namespace StudentService
             using var transaction = this.StateManager.CreateTransaction();
             var studentEnumerator = (await prevStudentDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
+            List<Student> newStudents = new List<Student>();
+
             while (await studentEnumerator.MoveNextAsync(CancellationToken.None))
             {
                 var student = studentEnumerator.Current;
-                await currentStudentDictionary.AddAsync(transaction, student.Key, student.Value);
-                await transaction.CommitAsync();
+                newStudents.Add(student.Value);
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                foreach (var student in newStudents)
+                {
+                    await currentStudentDictionary.AddAsync(transaction, student.Id, student);
+                }
+                await tx.CommitAsync();
             }
         }
     }

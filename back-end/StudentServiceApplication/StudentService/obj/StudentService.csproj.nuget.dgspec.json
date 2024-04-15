@@ -177,6 +177,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Azure.Data.Tables": {
+              "target": "Package",
+              "version": "[12.8.3, )"
+            },
             "Microsoft.ServiceFabric.Services": {
               "target": "Package",
               "version": "[7.0.1816, )"

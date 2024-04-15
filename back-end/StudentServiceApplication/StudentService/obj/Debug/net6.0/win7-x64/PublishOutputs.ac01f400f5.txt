@@ -225,6 +225,9 @@ C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\Studen
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\mscorrc.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\msquic.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\ucrtbase.dll
+C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Azure.Core.dll
+C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Azure.Data.Tables.dll
+C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.Bcl.AsyncInterfaces.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.Extensions.ObjectPool.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.ServiceFabric.Internal.Strings.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.ServiceFabric.Internal.dll
@@ -242,6 +245,7 @@ C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\Studen
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.ServiceFabric.FabricTransport.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.ServiceFabric.Services.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\Microsoft.ServiceFabric.Services.Remoting.dll
+C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\System.Memory.Data.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\System.Security.Cryptography.Pkcs.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\System.Security.Cryptography.Xml.dll
 C:\egyetem\master\Cloud\CRUIS_Projekat\back-end\StudentServiceApplication\StudentServiceApplication\pkg\Debug\StudentServicePkg\Code\System.ServiceModel.Primitives.dll
