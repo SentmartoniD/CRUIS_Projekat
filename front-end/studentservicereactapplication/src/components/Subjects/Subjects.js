@@ -17,6 +17,7 @@ const Subjects = () => {
             try{
                 const response = await ChangeGrade(subjectID, selectedStudent, selectedGrade, currentUser)
                 console.log(response)
+                alert("Grade changed successful!")
                 setSelectedData((prevSelectedData) => {
                     const newSelectedData = { ...prevSelectedData };
                     delete newSelectedData[subjectID];
@@ -25,7 +26,10 @@ const Subjects = () => {
             }
             catch(err)
             {
-                alert(err)
+                if (!err?.response)
+                    alert("No server response, login failed!");
+                else
+                    alert(JSON.stringify(err.response.data));
             }
         } else {
             alert("Select a grade!");
@@ -43,8 +47,13 @@ const Subjects = () => {
                 const response = await GetSubjects(eml, currentUser);
                 console.log(response.data);
                 setSubjects(response.data);
-            } catch(err) {
-                alert(err);
+            } 
+            catch(err)
+            {
+                if (!err?.response)
+                    alert("No server response, login failed!");
+                else
+                    alert(JSON.stringify(err.response.data));
             }
         };
         getSubjects();

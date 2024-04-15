@@ -26,7 +26,10 @@ const SignUp = () => {
         }
         catch(err)
         {
-            alert(err)
+            if (!err?.response)
+                alert("No server response, login failed!");
+            else
+                alert(JSON.stringify(err.response.data));
         }
     }
 

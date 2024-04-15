@@ -15,7 +15,17 @@ const AthendedSubjects= () => {
         const decodedPayload = atob(payload);
         const payloadObj = JSON.parse(decodedPayload);
         const idxnmb = payloadObj["indexNumber"]
-        const response = await RemoveAthendedSubject(subjectID, idxnmb, currentUser)
+        try{
+            const response = await RemoveAthendedSubject(subjectID, idxnmb, currentUser)
+            alert("Remove subject successful!")
+        }
+        catch(err)
+        {
+            if (!err?.response)
+                alert("No server response, login failed!");
+            else
+                alert(JSON.stringify(err.response.data));
+        }
         setTrigger(trigger + 1)
       };
 
@@ -33,7 +43,10 @@ const AthendedSubjects= () => {
             }
             catch(err)
             {
-                alert(err)
+                if (!err?.response)
+                    alert("No server response, login failed!");
+                else
+                    alert(JSON.stringify(err.response.data));
             }
         }
         getSubjects()

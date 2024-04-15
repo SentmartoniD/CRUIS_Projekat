@@ -25,19 +25,19 @@ namespace WebAPI.Controllers
                     new Uri("fabric:/StudentServiceApplication/ValidationService"));
                 var res1 = await statelessValidationServiceProxy.ValidateProfessorSignIn(professorSignInDTO);
                 if (res1 == false)
-                    return StatusCode(400, new { Error = "Sign in failed!" });
+                    return StatusCode(400, "Sign in failed!" );
                 var statelessAuthenticationServiceProxy = ServiceProxy.Create<IAuthentication>(
                     new Uri("fabric:/StudentServiceApplication/AuthenticationService"));
                 var res2 = await statelessAuthenticationServiceProxy.AuthenticateProfessor(professorSignInDTO);
                 if (res2 == false)
-                    return StatusCode(400, new { Error = "Sign in failed!" });
+                    return StatusCode(400, "Sign in failed!" );
                 var token = await statelessAuthenticationServiceProxy.IssueTokenForProfessor(professorSignInDTO.Email);
 
                 return Ok(token);
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500,  "Internal Server Error: " + e.Message );
             }
         }
 
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackProfessor();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
     }

@@ -24,19 +24,19 @@ namespace WebAPI.Controllers
                     new Uri("fabric:/StudentServiceApplication/ValidationService"));
                 var res1 = await statelessValidationServiceProxy.ValidateStudentSignIn(studentSignInDTO);
                 if (res1 == false)
-                    return StatusCode(400, new { Error = "Sign in failed!" });
+                    return StatusCode(400, "Index number and password cant be empty fields!" );
                 var statelessAuthenticationServiceProxy = ServiceProxy.Create<IAuthentication>(
                     new Uri("fabric:/StudentServiceApplication/AuthenticationService"));
                 var res2 = await statelessAuthenticationServiceProxy.AuthenticateStudent(studentSignInDTO);
                 if (res2 == false)
-                    return StatusCode(400, new { Error = "Sign in failed!" });
+                    return StatusCode(400, "Wrong index number and password!");
                 var token = await statelessAuthenticationServiceProxy.IssueTokenForStudent(studentSignInDTO.IndexNumber);
 
                 return Ok(token);
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
                     new Uri("fabric:/StudentServiceApplication/ValidationService"));
                 var res = await statelessValidationServiceProxy.ValidateStudentSignUp(studentSignUpDTO);
                 if (res == false)
-                    return StatusCode(400, new { Error = "Sign up failed!" });
+                    return StatusCode(400, "Sign up failed!" );
 
                 //prepare
                 var statelessServiceProxy = ServiceProxy.Create<ITransactionCoordinator>(
@@ -70,7 +70,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackStudent();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -92,7 +92,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -120,7 +120,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackStudent();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message );
             }
         }
 

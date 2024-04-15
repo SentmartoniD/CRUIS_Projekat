@@ -62,10 +62,14 @@ const Profile = () => {
                 {
                     const response = await UpdateStudent(user.id, firstName, lastName, indexNumber, email, password, currentUser);
                     console.log(response)
+                    alert("Update successful!")
                 }
                 catch(err)
                 {
-                    alert(err)
+                    if (!err?.response)
+                        alert("No server response, login failed!");
+                    else
+                        alert(JSON.stringify(err.response.data));
                 }
             }
             else
@@ -74,10 +78,14 @@ const Profile = () => {
                 {
                     const response = await UpdateProfessor(user.id, firstName, lastName, email, password, currentUser);
                     console.log(response)
+                    alert("Update successful!")
                 }
                 catch(err)
                 {
-                    alert(err)
+                    if (!err?.response)
+                        alert("No server response, login failed!");
+                    else
+                        alert(JSON.stringify(err.response.data));
                 }
             }
     }

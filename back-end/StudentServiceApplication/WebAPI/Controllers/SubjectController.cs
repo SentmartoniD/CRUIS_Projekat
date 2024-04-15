@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackSubject();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -104,7 +104,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -139,7 +139,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackSubject();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -168,7 +168,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
 
@@ -196,7 +196,7 @@ namespace WebAPI.Controllers
                 //rollback
                 await statelessServiceProxy.RollbackSubject();
 
-                return StatusCode(500, new { Error = "Internal Server Error: " + e.Message });
+                return StatusCode(500, "Internal Server Error: " + e.Message);
             }
         }
     }

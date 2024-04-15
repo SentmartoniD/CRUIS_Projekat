@@ -10,6 +10,7 @@ using Models;
 using Communication;
 using Models.DTO;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
 
 namespace ValidationService
 {

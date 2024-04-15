@@ -247,6 +247,7 @@ namespace StudentService
                 await tx.CommitAsync();
             }
 
+
             return newStudent;
         }
 
@@ -281,11 +282,21 @@ namespace StudentService
             using var transaction = this.StateManager.CreateTransaction();
             var studentEnumerator = (await currentStudentDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
+            List<Student> newStudents = new List<Student>();
+
             while (await studentEnumerator.MoveNextAsync(CancellationToken.None))
             {
                 var student = studentEnumerator.Current;
-                await prevStudentDictionary.AddAsync(transaction, student.Key, student.Value);
-                await transaction.CommitAsync();
+                newStudents.Add(student.Value);
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                foreach (var student in newStudents)
+                {
+                    await prevStudentDictionary.AddAsync(transaction, student.Id, student);
+                }
+                await tx.CommitAsync();
             }
         }
 

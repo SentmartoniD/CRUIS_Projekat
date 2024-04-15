@@ -396,11 +396,21 @@ namespace SubjectService
             using var transaction = this.StateManager.CreateTransaction();
             var subjectEnumerator = (await currentSubjectDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
+            List<Subject> newSubjects = new List<Subject>();
+
             while (await subjectEnumerator.MoveNextAsync(CancellationToken.None))
             {
                 var subject = subjectEnumerator.Current;
-                await prevSubjectDictionary.AddAsync(transaction, subject.Key, subject.Value);
-                await transaction.CommitAsync();
+                newSubjects.Add(subject.Value);
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                foreach (var subject in newSubjects)
+                {
+                    await prevSubjectDictionary.AddAsync(transaction, subject.Id, subject);
+                }
+                await tx.CommitAsync();
             }
         }
 
