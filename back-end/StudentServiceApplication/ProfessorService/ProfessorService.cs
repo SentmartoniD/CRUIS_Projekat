@@ -264,11 +264,21 @@ namespace ProfessorService
             using var transaction = this.StateManager.CreateTransaction();
             var professorEnumerator = (await currentProfessorDictionary.CreateEnumerableAsync(transaction)).GetAsyncEnumerator();
 
+            List<Professor> newProfessors = new List<Professor>();
+
             while (await professorEnumerator.MoveNextAsync(CancellationToken.None))
             {
                 var professor = professorEnumerator.Current;
-                await prevProfessorDictionary.AddAsync(transaction, professor.Key, professor.Value);
-                await transaction.CommitAsync();
+                newProfessors.Add(professor.Value);
+            }
+
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                foreach (var professor in newProfessors)
+                {
+                    await prevProfessorDictionary.AddAsync(transaction, professor.Id, professor);
+                }
+                await tx.CommitAsync();
             }
         }
 
