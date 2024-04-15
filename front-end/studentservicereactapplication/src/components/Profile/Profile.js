@@ -5,9 +5,15 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Label from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { GetStudent } from "../../services/StudentService";
 import { GetProfesor, UpdateProfessor } from "../../services/ProfessorService";
 import { UpdateStudent } from "../../services/StudentService";
+import { ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+
+// Create a theme instance
+const theme = createTheme();
 
 const Profile = () => {
     const {currentUser} = useContext(UserContext);
@@ -18,7 +24,7 @@ const Profile = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [role, setRole] = useState(null);
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const getUser = async () => {
@@ -93,26 +99,35 @@ const Profile = () => {
     return (
         <div>
             {user && (
-                <>
-                    <Typography variant='h5' >Profile</Typography>
+                <Box display="flex" flexDirection="column" alignItems="center" margin="200px auto" border={1} borderRadius={5} borderColor="primary.main" p={2} width={350} height={550} >
+                    <ThemeProvider theme={theme}>
+                        <Typography color="primary" variant='h5'>My Profile!</Typography>
+                    </ThemeProvider>
                     
-                    <Label>First name:</Label>
-                    <TextField required id='firstName' value={firstName} onChange={(e) => setFirstName(e.target.value)} ></TextField>
-                    <Label>Last name:</Label>
-                    <TextField required id='lastName' value={lastName}  onChange={(e) => setLastName(e.target.value)} ></TextField>
+                    <Box style={{ marginTop: '20px', marginBottom: '20px' }} Box display="flex" alignItems="center" gap={2} >
+                        <Label>First name:</Label>
+                        <TextField required id='firstName' value={firstName} onChange={(e) => setFirstName(e.target.value)} ></TextField>
+                    </Box>
+                    <Box style={{ marginTop: '20px', marginBottom: '20px' }} Box display="flex" alignItems="center" gap={2} >
+                        <Label>Last name:</Label>
+                        <TextField required id='lastName' value={lastName}  onChange={(e) => setLastName(e.target.value)} ></TextField>
+                    </Box>
                     {indexNumber && (
-                        <>
+                        <Box style={{ marginTop: '20px', marginBottom: '20px' }} Box display="flex" alignItems="center" gap={2} >
                             <Label>Index number:</Label>
-                            <TextField required id='indexNumber' value={indexNumber}  onChange={(e) => setIndexNumber(e.target.value)} ></TextField>
-                        </>
+                            <TextField style={{ marginRight: '35px' }} required id='indexNumber' value={indexNumber}  onChange={(e) => setIndexNumber(e.target.value)} ></TextField>
+                        </Box>
                     )}
-                    <Label>Email:</Label>
-                    <TextField required id='email' value={email} onChange={(e) => setEmail(e.target.value)} ></TextField>
-                    <Label>Password:</Label>
-                    <TextField required id='password' value={password} onChange={(e) => setPassword(e.target.value)} ></TextField>
-
-                    <Button type='submit' variant='contained' onClick={handleUpdate} >Update Profile!</Button>
-                </>
+                    <Box style={{ marginTop: '20px', marginBottom: '20px' }} Box display="flex" alignItems="center" gap={2} >
+                        <Label>Email:</Label>
+                        <TextField style={{ marginLeft: '35px' }} required id='email' value={email} onChange={(e) => setEmail(e.target.value)} ></TextField>
+                    </Box>
+                    <Box style={{ marginTop: '20px', marginBottom: '20px' }} Box display="flex" alignItems="center" gap={2} >
+                        <Label>Password:</Label>
+                        <TextField required id='password' value={password} onChange={(e) => setPassword(e.target.value)} ></TextField>
+                    </Box>
+                    <Button style={{ marginTop: '20px' }} type='submit' variant='contained' onClick={handleUpdate} >Update Profile!</Button>
+                </Box>
             )}
         </div>
     )
