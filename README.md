@@ -2,4 +2,4 @@
 
 ## Zadatak: Realizovati aplikaciju za online studentsku sluzbu
 
-## Korišćeni softverski alati: Azure Service Fabric,  ASP .NET CORE, ReactJs
+## Korišćeni softverski alati: Azure Service Fabric,  ASP .NET Core, ReactJs
